@@ -1,17 +1,15 @@
 import { Injectable } from '@angular/core';
 import { 
-  ExpressionEditorExtension, 
+  Extension, 
   CustomFunction, 
-  CustomSymbol, 
-  CustomFunctionCategory, 
-  CustomSymbolCategory 
+  CustomSymbol
 } from '../interfaces/extensibility.interfaces';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ExtensionManagerService {
-  private extensions: ExpressionEditorExtension[] = [];
+  private extensions: Extension[] = [];
   private customFunctions: CustomFunction[] = [];
   private customSymbols: CustomSymbol[] = [];
   private customVariables: { [key: string]: any } = {};
@@ -19,7 +17,7 @@ export class ExtensionManagerService {
   constructor() { }
 
   // Register an extension
-  registerExtension(extension: ExpressionEditorExtension): void {
+  registerExtension(extension: Extension): void {
     this.extensions.push(extension);
     
     // Merge custom functions
@@ -39,7 +37,7 @@ export class ExtensionManagerService {
   }
 
   // Get all registered extensions
-  getExtensions(): ExpressionEditorExtension[] {
+  getExtensions(): Extension[] {
     return [...this.extensions];
   }
 
@@ -98,5 +96,29 @@ export class ExtensionManagerService {
     this.customFunctions = [];
     this.customSymbols = [];
     this.customVariables = {};
+  }
+
+  // Get available function categories
+  getFunctionCategories(): string[] {
+    const categories = new Set<string>();
+    this.customFunctions.forEach(func => categories.add(func.category));
+    return Array.from(categories);
+  }
+
+  // Get available symbol categories
+  getSymbolCategories(): string[] {
+    const categories = new Set<string>();
+    this.customSymbols.forEach(symbol => categories.add(symbol.category));
+    return Array.from(categories);
+  }
+
+  // Check if a function exists
+  hasFunction(functionName: string): boolean {
+    return this.customFunctions.some(func => func.name === functionName);
+  }
+
+  // Check if a symbol exists
+  hasSymbol(symbolName: string): boolean {
+    return this.customSymbols.some(symbol => symbol.name === symbolName);
   }
 }

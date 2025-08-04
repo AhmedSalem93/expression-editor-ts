@@ -53,7 +53,7 @@ export class ExpressionEditorComponent implements ControlValueAccessor {
   private onChange = (value: string) => {};
   private onTouched = () => {};
 
-  // Data from external files (Date/Time functionality removed)
+  // Data from external files 
   functionCategories: FunctionCategory[] = [];
   symbolCategories: SymbolCategory[] = SYMBOL_CATEGORIES;
 
@@ -74,7 +74,7 @@ export class ExpressionEditorComponent implements ControlValueAccessor {
     this.functionCategories.push({
       name: 'custom',
       label: 'Custom Functions',
-      functions: [] // Will be populated dynamically
+      functions: [] 
     });
   }
 

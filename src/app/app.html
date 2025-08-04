@@ -3,9 +3,7 @@
   <main class="main-content">
     <lib-expression-editor
       [(ngModel)]="expressionValue"
-      [config]="editorConfig"
-      (expressionChange)="onExpressionChange($event)"
-      (evaluationResultChange)="onValidationChange($event)">
+      [config]="editorConfig">
     </lib-expression-editor>
   </main>
 </div>

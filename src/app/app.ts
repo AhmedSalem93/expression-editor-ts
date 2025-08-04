@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -21,8 +21,6 @@ import { ExtensionManagerService } from '../../projects/anguler-expression-edito
   styleUrl: './app.css',
 })
 export class App {
-  protected readonly title = signal('my-workspace');
-
   // Expression Editor properties
   expressionValue = '';
 
@@ -30,21 +28,8 @@ export class App {
   editorConfig: any = {
     title: 'Advanced Expression Editor',
     placeholder: 'Enter your expression here...',
-    rows: 8,
-    showHeader: true,
-    showFooter: false,
     description: 'Expression Editor to transform and evaluate data',
-    enableValidation: true,
-    enableAutocomplete: true,
+    rows: 5,
+    showHeader: true,
   };
-
-  // Expression Editor event handlers
-  onExpressionChange(value: string) {
-    this.expressionValue = value;
-    console.log('Expression changed:', value);
-  }
-
-  onValidationChange(result: any) {
-    console.log('Validation result:', result);
-  }
 }

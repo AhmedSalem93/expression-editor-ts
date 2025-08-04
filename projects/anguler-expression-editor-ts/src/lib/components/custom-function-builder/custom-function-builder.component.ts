@@ -14,6 +14,7 @@ export class CustomFunctionBuilderComponent {
   @Input() isVisible = false;
   @Output() functionCreated = new EventEmitter<CustomFunction>();
   @Output() closeModal = new EventEmitter<void>();
+  @Output() cancelled = new EventEmitter<void>();
 
   newFunction: Partial<CustomFunction> = {
     name: '',
@@ -26,6 +27,84 @@ export class CustomFunctionBuilderComponent {
   functionCode = '';
   testInput = '';
   testResult: { success: boolean; message: string } | null = null;
+  showTestSection = false;
+
+  // Getter/setter properties for backward compatibility with tests
+  get functionName(): string {
+    return this.newFunction.name || '';
+  }
+
+  set functionName(value: string) {
+    this.newFunction.name = value;
+  }
+
+  get functionDescription(): string {
+    return this.newFunction.description || '';
+  }
+
+  set functionDescription(value: string) {
+    this.newFunction.description = value;
+  }
+
+  get functionSyntax(): string {
+    return this.newFunction.syntax || '';
+  }
+
+  set functionSyntax(value: string) {
+    this.newFunction.syntax = value;
+  }
+
+  get functionImplementation(): string {
+    return this.functionCode;
+  }
+
+  set functionImplementation(value: string) {
+    this.functionCode = value;
+  }
+
+  get testExpression(): string {
+    return this.testInput;
+  }
+
+  set testExpression(value: string) {
+    this.testInput = value;
+  }
+
+  // Validation methods
+  isValidFunctionName(): boolean {
+    const name = this.functionName.trim();
+    return name.length > 0 && /^[a-zA-Z_][a-zA-Z0-9_]*$/.test(name);
+  }
+
+  isValidImplementation(): boolean {
+    const implementation = this.functionImplementation.trim();
+    if (!implementation) return false;
+    
+    try {
+      new Function('...args', implementation);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  // Toggle test section
+  toggleTestSection(): void {
+    this.showTestSection = !this.showTestSection;
+  }
+
+  // Cancel function
+  cancel(): void {
+    this.resetForm();
+    this.cancelled.emit();
+  }
+
+  // Auto-generate syntax when function name changes
+  onFunctionNameChange(): void {
+    if (this.functionName) {
+      this.functionSyntax = `${this.functionName}()`;
+    }
+  }
 
   closeBuilder(): void {
     this.closeModal.emit();

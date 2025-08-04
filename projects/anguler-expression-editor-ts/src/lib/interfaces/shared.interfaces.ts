@@ -1,4 +1,3 @@
-// Shared interfaces used across multiple components
 
 export interface FunctionCategory {
   name: string;

@@ -17,9 +17,7 @@ import { ExtensionManagerService } from './services/extension-manager.service';
   imports: [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule,
-    ExpressionEditorComponent,
-    CustomFunctionBuilderComponent
+    ReactiveFormsModule
   ],
   providers: [
     ExpressionEvaluatorService,

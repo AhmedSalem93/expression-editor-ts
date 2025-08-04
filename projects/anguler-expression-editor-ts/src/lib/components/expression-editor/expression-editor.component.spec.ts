@@ -238,7 +238,8 @@ describe('ExpressionEditorComponent', () => {
         name: 'customFunc',
         syntax: 'customFunc(x)',
         description: 'Custom function',
-        implementation: 'return x * 2;'
+        implementation: 'return x * 2;',
+        category: 'custom'
       };
       
       const mockTextarea = {

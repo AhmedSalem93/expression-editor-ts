@@ -1,11 +1,11 @@
 /*
- * Public API Surface of angular-expression-editor-ts
+ * Public API Surface of anguler-expression-editor-ts
  */
 
-// Module
+// Main library exports
 export * from './lib/angular-expression-editor-ts';
 
-// Components
+// Core components
 export * from './lib/components/expression-editor/expression-editor.component';
 export * from './lib/components/custom-function-builder/custom-function-builder.component';
 
@@ -13,10 +13,9 @@ export * from './lib/components/custom-function-builder/custom-function-builder.
 export * from './lib/services/expression-evaluator.service';
 export * from './lib/services/extension-manager.service';
 
-// Extensions
-export * from './lib/extensions/math-extension';
-export * from './lib/extensions/business-extension';
-
 // Interfaces
 export * from './lib/interfaces/shared.interfaces';
 export * from './lib/interfaces/extensibility.interfaces';
+
+// Data
+export * from './lib/data/function-categories.data';
