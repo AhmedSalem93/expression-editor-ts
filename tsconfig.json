@@ -3,6 +3,20 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "paths": {
+      "anguler-expression-editor-ts": [
+        "./dist/anguler-expression-editor-ts"
+      ],
+      "anguler-expression-editor-ts/*": [
+        "./projects/anguler-expression-editor-ts/src/lib/*"
+      ],
+      "@anguler-expression-editor-ts/components": [
+        "./projects/anguler-expression-editor-ts/src/lib/components"
+      ],
+      "@anguler-expression-editor-ts/interfaces": [
+        "./projects/anguler-expression-editor-ts/src/lib/interfaces"
+      ]
+    },
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
@@ -29,6 +43,12 @@
     },
     {
       "path": "./tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/anguler-expression-editor-ts/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/anguler-expression-editor-ts/tsconfig.spec.json"
     }
   ]
 }

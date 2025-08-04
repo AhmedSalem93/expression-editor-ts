@@ -1,0 +1,127 @@
+<div class="custom-function-overlay" *ngIf="isVisible" (click)="closeBuilder()">
+  <div class="custom-function-dialog" (click)="$event.stopPropagation()">
+    <div class="dialog-header">
+      <h3>Create Custom Function</h3>
+      <button class="close-btn" (click)="closeBuilder()">×</button>
+    </div>
+    
+    <div class="dialog-content">
+      <form (ngSubmit)="createFunction()" #functionForm="ngForm">
+        <div class="form-group">
+          <label for="functionName">Function Name:</label>
+          <input
+            type="text"
+            id="functionName"
+            name="functionName"
+            [(ngModel)]="newFunction.name"
+            required
+            class="form-control"
+            placeholder="e.g., square"
+          />
+        </div>
+        
+        <div class="form-group">
+          <label for="functionSyntax">Syntax:</label>
+          <input
+            type="text"
+            id="functionSyntax"
+            name="functionSyntax"
+            [(ngModel)]="newFunction.syntax"
+            required
+            class="form-control"
+            placeholder="e.g., square(x)"
+          />
+        </div>
+        
+        <div class="form-group">
+          <label for="functionDescription">Description:</label>
+          <textarea
+            id="functionDescription"
+            name="functionDescription"
+            [(ngModel)]="newFunction.description"
+            required
+            class="form-control"
+            rows="2"
+            placeholder="Returns the square of a number"
+          ></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="functionExample">Example (optional):</label>
+          <input
+            type="text"
+            id="functionExample"
+            name="functionExample"
+            [(ngModel)]="newFunction.example"
+            class="form-control"
+            placeholder="square(5) = 25"
+          />
+        </div>
+        
+        <div class="form-group">
+          <label for="functionCategory">Category:</label>
+          <select
+            id="functionCategory"
+            name="functionCategory"
+            [(ngModel)]="newFunction.category"
+            class="form-control"
+          >
+            <option value="custom">Custom</option>
+            <option value="arithmetic">Arithmetic</option>
+            <option value="logical">Logical</option>
+            <option value="string">String</option>
+            <option value="datetime">Date/Time</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="functionCode">JavaScript Implementation:</label>
+          <textarea
+            id="functionCode"
+            name="functionCode"
+            [(ngModel)]="functionCode"
+            required
+            class="form-control code-editor"
+            rows="6"
+            placeholder="return args[0] * args[0];"
+          ></textarea>
+          <small class="form-text">
+            Write JavaScript code that will be executed when your function is called
+          </small>
+        </div>
+        
+        <div class="test-section">
+          <h4>Test Your Function</h4>
+          <div class="test-input-group">
+            <input
+              type="text"
+              [(ngModel)]="testInput"
+              name="testInput"
+              class="form-control test-input"
+              placeholder="5"
+            />
+            <button type="button" (click)="testFunction()" class="btn btn-test">
+              Test
+            </button>
+          </div>
+          
+          <div *ngIf="testResult" class="test-result">
+            <strong>Result:</strong>
+            <span [class]="testResult.success ? 'success' : 'error'">
+              {{ testResult.message }}
+            </span>
+          </div>
+        </div>
+        
+        <div class="form-actions">
+          <button type="button" (click)="closeBuilder()" class="btn btn-secondary">
+            Cancel
+          </button>
+          <button type="submit" [disabled]="!functionForm.valid" class="btn btn-primary">
+            Create Function
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

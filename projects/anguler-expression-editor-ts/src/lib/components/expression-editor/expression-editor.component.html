@@ -1,0 +1,190 @@
+<div class="expression-editor-container">
+  <div class="editor-header" *ngIf="config?.showHeader !== false">
+    <h3>{{ config?.title || "Advanced Expression Editor" }}</h3>
+    <p>
+      {{
+        config?.description ||
+          "Expression Editor to transform and evaluate data"
+      }}
+    </p>
+  </div>
+
+  <div class="editor-section">
+    <textarea
+      #expressionTextarea
+      [(ngModel)]="value"
+      (input)="onInput($event)"
+      (blur)="onBlur()"
+      [placeholder]="config?.placeholder || 'Enter your expression here...'"
+      [rows]="config?.rows || 6"
+      [disabled]="disabled"
+      class="expression-textarea"
+    >
+    </textarea>
+
+    <div class="controls-row">
+      <button
+        (click)="toggleEditor()"
+        [class]="'btn-toggle ' + (disabled ? 'btn-enable' : 'btn-disable')"
+      >
+        {{ disabled ? "Enable" : "Disable" }} Editor
+      </button>
+      <button (click)="clearExpression()" class="btn">Clear Expression</button>
+      <button (click)="openFunctionsMenu()" class="btn btn-functions">
+        📋 Functions Menu
+      </button>
+      <button (click)="openSymbolPicker()" class="btn btn-symbols">
+        🔣 Symbol Picker
+      </button>
+
+      <!-- Custom Function Builder Component -->
+      <div class="custom-function-inline">
+        <lib-custom-function-builder
+          [isVisible]="showCustomFunctionBuilder"
+          (functionCreated)="onCustomFunctionCreated($event)"
+          (closeModal)="closeCustomFunctionBuilder()"
+        >
+        </lib-custom-function-builder>
+        <button (click)="openCustomFunctionBuilder()" class="btn btn-custom">
+          ⚙️ Create Function
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Expression Info Section -->
+  <div class="info-section">
+    <p>
+      <strong>Current Value:</strong> {{ value || "No expression entered" }}
+    </p>
+    <p><strong>Length:</strong> {{ value.length || 0 }} characters</p>
+
+    <!-- Expression Evaluation -->
+    <div *ngIf="evaluationResult" class="evaluation-info">
+      <h5>Evaluation Result</h5>
+      <div *ngIf="evaluationResult.success" class="result-success">
+        <p>
+          <strong>Result:</strong>
+          <span class="result-value">{{ getFormattedResult() }}</span>
+        </p>
+        <p>
+          <strong>Type:</strong>
+          <span class="result-type">{{ evaluationResult.type }}</span>
+        </p>
+      </div>
+      <div *ngIf="!evaluationResult.success" class="result-error">
+        <p>
+          <strong>Error:</strong>
+          <span class="error-message">{{ evaluationResult.error }}</span>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Functions Menu Modal -->
+  <div
+    class="functions-menu-overlay"
+    *ngIf="showFunctionsMenu"
+    (click)="closeFunctionsMenu()"
+  >
+    <div class="functions-menu-dialog" (click)="$event.stopPropagation()">
+      <div class="dialog-header">
+        <h3>Functions Menu</h3>
+        <button class="close-btn" (click)="closeFunctionsMenu()">×</button>
+      </div>
+
+      <div class="dialog-content">
+        <div class="category-tabs">
+          <button
+            *ngFor="let category of functionCategories"
+            class="category-tab"
+            [class.active]="selectedFunctionCategory === category.name"
+            (click)="selectFunctionCategory(category.name)"
+          >
+            {{ category.label }}
+          </button>
+        </div>
+
+        <div class="content-area">
+          <div class="function-list">
+            <div
+              *ngFor="let func of getSelectedCategoryFunctions()"
+              class="function-item"
+              [class.selected]="selectedFunction === func"
+              (click)="selectFunction(func)"
+            >
+              <div class="function-name">{{ func.name }}</div>
+              <div class="function-syntax">{{ func.syntax }}</div>
+            </div>
+          </div>
+
+          <div class="function-details" *ngIf="selectedFunction">
+            <h4>{{ selectedFunction.name }}</h4>
+            <p><strong>Syntax:</strong> {{ selectedFunction.syntax }}</p>
+            <p>
+              <strong>Description:</strong> {{ selectedFunction.description }}
+            </p>
+            <p *ngIf="selectedFunction.example">
+              <strong>Example:</strong> {{ selectedFunction.example }}
+            </p>
+            <button (click)="insertFunction(selectedFunction)">
+              Insert Function
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Symbol Picker Modal -->
+  <div
+    class="symbol-picker-overlay"
+    *ngIf="showSymbolPicker"
+    (click)="closeSymbolPicker()"
+  >
+    <div class="symbol-picker-dialog" (click)="$event.stopPropagation()">
+      <div class="dialog-header">
+        <h3>Symbol Picker</h3>
+        <button class="close-btn" (click)="closeSymbolPicker()">×</button>
+      </div>
+
+      <div class="dialog-content">
+        <div class="category-tabs">
+          <button
+            *ngFor="let category of symbolCategories"
+            class="category-tab"
+            [class.active]="selectedSymbolCategory === category.name"
+            (click)="selectSymbolCategory(category.name)"
+          >
+            {{ category.label }}
+          </button>
+        </div>
+
+        <div class="content-area">
+          <div class="symbol-grid">
+            <div
+              *ngFor="let symbol of getSelectedCategorySymbols()"
+              class="symbol-item"
+              [class.selected]="selectedSymbol === symbol"
+              (click)="selectSymbol(symbol)"
+            >
+              <div class="symbol-display">{{ symbol.symbol }}</div>
+              <div class="symbol-name">{{ symbol.name }}</div>
+            </div>
+          </div>
+
+          <div class="symbol-details" *ngIf="selectedSymbol">
+            <h4>{{ selectedSymbol.name }}</h4>
+            <p><strong>Symbol:</strong> {{ selectedSymbol.symbol }}</p>
+            <p>
+              <strong>Description:</strong> {{ selectedSymbol.description }}
+            </p>
+            <button (click)="insertSymbol(selectedSymbol)">
+              Insert Symbol
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
