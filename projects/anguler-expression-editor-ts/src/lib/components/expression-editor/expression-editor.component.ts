@@ -1,7 +1,5 @@
 import { Component, Input, Output, EventEmitter, forwardRef, ViewChild, ElementRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
 import { CustomFunctionBuilderComponent } from '../custom-function-builder/custom-function-builder.component';
 import { ExpressionEvaluatorService } from '../../services/expression-evaluator.service';
 import { ExtensionManagerService } from '../../services/extension-manager.service';
@@ -17,8 +15,7 @@ import { FUNCTION_CATEGORIES, SYMBOL_CATEGORIES } from '../../data/function-cate
 
 @Component({
   selector: 'lib-expression-editor',
-  standalone: true,
-  imports: [CommonModule, FormsModule, CustomFunctionBuilderComponent],
+  standalone: false,
   templateUrl: './expression-editor.component.html',
   styleUrls: ['./expression-editor.component.css'],
   providers: [

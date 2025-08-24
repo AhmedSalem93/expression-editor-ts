@@ -3,7 +3,7 @@
  */
 
 // Main library exports
-export * from './lib/angular-expression-editor-ts';
+export * from './lib/angular-expression-editor-ts.module';
 
 // Core components
 export * from './lib/components/expression-editor/expression-editor.component';

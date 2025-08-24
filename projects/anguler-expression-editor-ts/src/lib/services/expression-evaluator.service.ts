@@ -85,6 +85,7 @@ export class ExpressionEvaluatorService {
     return processed;
   }
 
+  //for test
   private createEvaluationContext(): any {
     return {
       Math: Math,
@@ -95,7 +96,6 @@ export class ExpressionEvaluatorService {
       parseFloat: parseFloat,
       isNaN: isNaN,
       isFinite: isFinite,
-      // Add some sample variables for testing
       x: 10,
       y: 5,
       name: "John",
@@ -106,12 +106,10 @@ export class ExpressionEvaluatorService {
   }
 
   private safeEvaluate(expression: string, context: any): any {
-    // Create a function that evaluates the expression in the given context
     const contextKeys = Object.keys(context);
     const contextValues = Object.values(context);
     
     try {
-      // Create a function with the context variables as parameters
       const func = new Function(...contextKeys, `return ${expression}`);
       return func(...contextValues);
     } catch (error) {
@@ -130,7 +128,7 @@ export class ExpressionEvaluatorService {
     if (result === undefined) return 'undefined';
     if (typeof result === 'string') return `"${result}"`;
     if (typeof result === 'number') {
-      // Format numbers nicely
+      
       if (Number.isInteger(result)) return result.toString();
       return result.toFixed(6).replace(/\.?0+$/, '');
     }

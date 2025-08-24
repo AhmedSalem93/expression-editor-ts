@@ -2,10 +2,8 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-// Import the comprehensive expression editor component directly from source
-import { ExpressionEditorComponent } from '../../projects/anguler-expression-editor-ts/src/lib/components/expression-editor/expression-editor.component';
-import { ExpressionEvaluatorService } from '../../projects/anguler-expression-editor-ts/src/lib/services/expression-evaluator.service';
-import { ExtensionManagerService } from '../../projects/anguler-expression-editor-ts/src/lib/services/extension-manager.service';
+// Import the module instead of individual components
+import { AngularExpressionEditorModule } from '../../projects/anguler-expression-editor-ts/src/lib/angular-expression-editor-ts.module';
 
 @Component({
   selector: 'app-root',
@@ -14,11 +12,10 @@ import { ExtensionManagerService } from '../../projects/anguler-expression-edito
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    ExpressionEditorComponent,
+    AngularExpressionEditorModule,
   ],
-  providers: [ExpressionEvaluatorService, ExtensionManagerService],
   templateUrl: './app.html',
-  styleUrl: './app.css',
+  styleUrls: ['./app.css'],
 })
 export class App {
   // Expression Editor properties
