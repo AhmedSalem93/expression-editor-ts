@@ -1,0 +1,117 @@
+<div class="variable-manager-modal" *ngIf="showVariableManager" (click)="onClose()">
+  <div class="variable-manager-content" (click)="$event.stopPropagation()">
+    
+    <!-- Header -->
+    <div class="variable-manager-header">
+      <h3>Variable Manager</h3>
+      <button class="close-btn" (click)="onClose()" type="button">×</button>
+    </div>
+
+    <!-- Variable List -->
+    <div class="variable-list" *ngIf="!showCreateForm">
+      <div class="variable-item" 
+           *ngFor="let variable of variables" 
+           [class.selected]="selectedVariable === variable"
+           (click)="onVariableSelected(variable)">
+        
+        <div class="variable-header">
+          <span class="variable-name">{{ variable.name }}</span>
+          <span class="variable-type">{{ getVariableTypeLabel(variable.type) }}</span>
+          <span class="variable-value">{{ getVariableValueDisplay(variable) }}</span>
+          <button 
+            class="delete-btn" 
+            (click)="onDeleteVariable(variable, $event)" 
+            type="button"
+            title="Delete variable">
+            🗑️
+          </button>
+        </div>
+        
+        <div class="variable-explanation">
+          {{ variable.explanation }}
+        </div>
+        
+        <div class="variable-actions" *ngIf="selectedVariable === variable">
+          <button class="insert-btn" (click)="onInsertVariable(variable)" type="button">
+            Insert Variable
+          </button>
+        </div>
+      </div>
+
+      <div class="no-variables" *ngIf="variables.length === 0">
+        <p>No variables available.</p>
+      </div>
+    </div>
+
+    <!-- Create Variable Form -->
+    <div class="create-variable-form" *ngIf="showCreateForm">
+      <h4>Create New Variable</h4>
+      
+      <div class="form-group">
+        <label for="variableName">Variable Name:</label>
+        <input 
+          id="variableName"
+          type="text" 
+          [(ngModel)]="newVariable.name" 
+          placeholder="Enter variable name (e.g., temperature, count)"
+          class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label for="variableType">Type:</label>
+        <select id="variableType" [(ngModel)]="newVariable.type" class="form-control">
+          <option [value]="DataType.STRING">String</option>
+          <option [value]="DataType.INTEGER">Integer</option>
+          <option [value]="DataType.REAL">Real</option>
+          <option [value]="DataType.BOOLEAN">Boolean</option>
+          <option [value]="DataType.FUNCTION">Function</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="variableValue">Value:</label>
+        <input 
+          id="variableValue"
+          type="text" 
+          [(ngModel)]="newVariable.value" 
+          [placeholder]="getValuePlaceholder()"
+          class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label for="variableExplanation">Explanation:</label>
+        <textarea 
+          id="variableExplanation"
+          [(ngModel)]="newVariable.explanation" 
+          placeholder="Explain what this variable represents and how it's used"
+          class="form-control explanation-textarea"
+          rows="3"></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button 
+          class="create-btn" 
+          (click)="onCreateVariable()" 
+          [disabled]="!isValidNewVariable()"
+          type="button">
+          Create Variable
+        </button>
+        <button class="cancel-btn" (click)="onHideCreateForm()" type="button">
+          Cancel
+        </button>
+      </div>
+    </div>
+
+    <!-- Footer Actions -->
+    <div class="variable-manager-footer" *ngIf="!showCreateForm">
+      <button 
+        class="create-variable-btn" 
+        (click)="onShowCreateForm()" 
+        *ngIf="allowVariableCreation"
+        type="button">
+        + Create Variable
+      </button>
+    </div>
+
+  </div>
+</div>

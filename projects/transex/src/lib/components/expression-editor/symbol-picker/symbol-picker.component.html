@@ -1,0 +1,50 @@
+<div
+  class="symbol-picker-overlay"
+  *ngIf="showSymbolPicker"
+  (click)="onCloseSymbolPicker()"
+>
+  <div class="symbol-picker-dialog" (click)="$event.stopPropagation()">
+    <div class="dialog-header">
+      <h3>Symbol Picker</h3>
+      <button class="close-btn" (click)="onCloseSymbolPicker()">×</button>
+    </div>
+
+    <div class="dialog-content">
+      <div class="category-tabs">
+        <button
+          *ngFor="let category of symbolCategories"
+          class="category-tab"
+          [class.active]="selectedSymbolCategory === category.name"
+          (click)="onSelectSymbolCategory(category.name)"
+        >
+          {{ category.label }}
+        </button>
+      </div>
+
+      <div class="content-area">
+        <div class="symbol-grid">
+          <div
+            *ngFor="let symbol of getSelectedCategorySymbols()"
+            class="symbol-item"
+            [class.selected]="selectedSymbol === symbol"
+            (click)="onSelectSymbol(symbol)"
+          >
+            <div class="symbol-display">{{ symbol.symbol }}</div>
+            <div class="symbol-name">{{ symbol.name }}</div>
+          </div>
+        </div>
+
+        <div class="symbol-details" *ngIf="selectedSymbol">
+          <h4>{{ selectedSymbol!.name }}</h4>
+          <p><strong>Symbol:</strong> {{ selectedSymbol!.symbol }}</p>
+          <p>
+            <strong>Description:</strong> {{ selectedSymbol!.description }}
+          </p>
+          <button (click)="onInsertSymbol(selectedSymbol!)">
+            Insert Symbol
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

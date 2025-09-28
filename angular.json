@@ -79,20 +79,20 @@
         }
       }
     },
-    "anguler-expression-editor-ts": {
+    "transex": {
       "projectType": "library",
-      "root": "projects/anguler-expression-editor-ts",
-      "sourceRoot": "projects/anguler-expression-editor-ts/src",
+      "root": "projects/transex",
+      "sourceRoot": "projects/transex/src",
       "prefix": "lib",
       "architect": {
         "build": {
           "builder": "@angular/build:ng-packagr",
           "configurations": {
             "production": {
-              "tsConfig": "projects/anguler-expression-editor-ts/tsconfig.lib.prod.json"
+              "tsConfig": "projects/transex/tsconfig.lib.prod.json"
             },
             "development": {
-              "tsConfig": "projects/anguler-expression-editor-ts/tsconfig.lib.json"
+              "tsConfig": "projects/transex/tsconfig.lib.json"
             }
           },
           "defaultConfiguration": "production"
@@ -100,7 +100,7 @@
         "test": {
           "builder": "@angular/build:karma",
           "options": {
-            "tsConfig": "projects/anguler-expression-editor-ts/tsconfig.spec.json",
+            "tsConfig": "projects/transex/tsconfig.spec.json",
             "polyfills": ["zone.js", "zone.js/testing"]
           }
         }

@@ -1,0 +1,19 @@
+<div class="info-section">
+  <p>
+    <strong>Current Value:</strong> {{ value || "No expression entered" }}
+  </p>
+
+  <div *ngIf="shouldShowTypeInfo()" class="type-info">
+    <p>
+      <strong>Return Type:</strong>
+      <span class="result-type">{{ getReturnTypeDisplay() }}</span>
+    </p>
+  </div>
+
+  <div *ngIf="typeResult && !typeResult.success" class="error-info">
+    <p>
+      <strong>Error:</strong>
+      <span class="error-message">{{ typeResult.error }}</span>
+    </p>
+  </div>
+</div>

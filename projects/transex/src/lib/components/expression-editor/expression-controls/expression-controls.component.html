@@ -1,0 +1,51 @@
+<div class="controls-row">
+  <button
+    (click)="onToggleEditor()"
+    [class]="'btn-toggle ' + (disabled ? 'btn-enable' : 'btn-disable')"
+  >
+    {{ disabled ? "Enable" : "Disable" }} Editor
+  </button>
+  <button 
+    (click)="onClearExpression()" 
+    class="btn"
+    [disabled]="disabled">
+    Clear Expression
+  </button>
+  <button 
+    (click)="onOpenFunctionsMenu()" 
+    class="btn btn-functions"
+    [disabled]="disabled">
+    📋 Functions Menu
+  </button>
+  <button 
+    (click)="onOpenSymbolPicker()" 
+    class="btn btn-symbols"
+    [disabled]="disabled">
+    🔣 Symbol Picker
+  </button>
+
+  
+  <button 
+    *ngIf="hasVariables"
+    (click)="onOpenVariableManager()" 
+    class="btn btn-variables"
+    [disabled]="disabled">
+    🧮 Variables
+  </button>
+
+ 
+  <div class="custom-function-inline">
+    <lib-custom-function-builder
+      [isVisible]="showCustomFunctionBuilder"
+      (functionCreated)="onCustomFunctionCreated($event)"
+      (closeModal)="onCloseCustomFunctionBuilder()"
+    >
+    </lib-custom-function-builder>
+    <button 
+      (click)="onOpenCustomFunctionBuilder()" 
+      class="btn btn-custom"
+      [disabled]="disabled">
+      ⚙️ Create Function
+    </button>
+  </div>
+</div>

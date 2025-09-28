@@ -1,0 +1,20 @@
+<div class="textarea-container">
+  <textarea
+    #expressionTextarea
+    class="expression-textarea"
+    [class.valid]="currentValidation && currentValidation.isValid"
+    [class.invalid]="currentValidation && !currentValidation.isValid"
+    [(ngModel)]="value"
+    (input)="onInput($event)"
+    [placeholder]="getPlaceholder()"
+    [disabled]="disabled"
+    rows="3"
+  ></textarea>
+  
+  <div *ngIf="currentValidation" class="validation-display" 
+       [class.validation-success]="currentValidation.isValid"
+       [class.validation-error]="!currentValidation.isValid">
+    <span class="validation-icon">{{ currentValidation.isValid ? '✓' : '⚠' }}</span>
+    <span class="validation-message">{{ currentValidation.message }}</span>
+  </div>
+</div>

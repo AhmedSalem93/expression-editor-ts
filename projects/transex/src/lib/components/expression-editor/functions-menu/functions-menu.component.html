@@ -1,0 +1,54 @@
+<!-- Functions Menu Modal -->
+<div
+  class="functions-menu-overlay"
+  *ngIf="showFunctionsMenu"
+  (click)="onCloseFunctionsMenu()"
+>
+  <div class="functions-menu-dialog" (click)="$event.stopPropagation()">
+    <div class="dialog-header">
+      <h3>Functions Menu</h3>
+      <button class="close-btn" (click)="onCloseFunctionsMenu()">×</button>
+    </div>
+
+    <div class="dialog-content">
+      <div class="category-tabs">
+        <button
+          *ngFor="let category of functionCategories"
+          class="category-tab"
+          [class.active]="selectedFunctionCategory === category.name"
+          (click)="onSelectFunctionCategory(category.name)"
+        >
+          {{ category.label }}
+        </button>
+      </div>
+
+      <div class="content-area">
+        <div class="function-list">
+          <div
+            *ngFor="let func of getSelectedCategoryFunctions()"
+            class="function-item"
+            [class.selected]="selectedFunction === func"
+            (click)="onSelectFunction(func)"
+          >
+            <div class="function-name">{{ func.name }}</div>
+            <div class="function-syntax">{{ func.syntax }}</div>
+          </div>
+        </div>
+
+        <div class="function-details" *ngIf="selectedFunction">
+          <h4>{{ selectedFunction!.name }}</h4>
+          <p><strong>Syntax:</strong> {{ selectedFunction!.syntax }}</p>
+          <p>
+            <strong>Description:</strong> {{ selectedFunction!.description }}
+          </p>
+          <p *ngIf="selectedFunction!.example">
+            <strong>Example:</strong> {{ selectedFunction!.example }}
+          </p>
+          <button (click)="onInsertFunction(selectedFunction!)">
+            Insert Function
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

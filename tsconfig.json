@@ -4,17 +4,17 @@
   "compileOnSave": false,
   "compilerOptions": {
     "paths": {
-      "anguler-expression-editor-ts": [
-        "./dist/anguler-expression-editor-ts"
+      "transex": [
+        "./dist/transex"
       ],
-      "anguler-expression-editor-ts/*": [
-        "./projects/anguler-expression-editor-ts/src/lib/*"
+      "transex/*": [
+        "./projects/transex/src/lib/*"
       ],
-      "@anguler-expression-editor-ts/components": [
-        "./projects/anguler-expression-editor-ts/src/lib/components"
+      "@transex/components": [
+        "./projects/transex/src/lib/components"
       ],
-      "@anguler-expression-editor-ts/interfaces": [
-        "./projects/anguler-expression-editor-ts/src/lib/interfaces"
+      "@transex/interfaces": [
+        "./projects/transex/src/lib/interfaces"
       ]
     },
     "strict": true,
@@ -27,7 +27,8 @@
     "experimentalDecorators": true,
     "importHelpers": true,
     "target": "ES2022",
-    "module": "preserve"
+    "module": "ES2022",
+    "moduleResolution": "node"
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
@@ -45,10 +46,10 @@
       "path": "./tsconfig.spec.json"
     },
     {
-      "path": "./projects/anguler-expression-editor-ts/tsconfig.lib.json"
+      "path": "./projects/transex/tsconfig.lib.json"
     },
     {
-      "path": "./projects/anguler-expression-editor-ts/tsconfig.spec.json"
+      "path": "./projects/transex/tsconfig.spec.json"
     }
   ]
 }

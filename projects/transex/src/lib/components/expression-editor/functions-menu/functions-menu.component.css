@@ -1,0 +1,191 @@
+.functions-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.functions-menu-dialog {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 800px;
+  max-height: 80vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid #dee2e6;
+  background-color: #f8f9fa;
+}
+
+.dialog-header h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #495057;
+  font-family: var(--font-family-system, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif);
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: black;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.close-btn:hover {
+  background-color: #e9ecef;
+  color: #495057;
+}
+
+.dialog-content {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.category-tabs {
+  display: flex;
+  border-bottom: 1px solid #dee2e6;
+  background-color: #f8f9fa;
+  overflow-x: auto;
+}
+
+.category-tab {
+  padding: 12px 16px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: black;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: all 0.15s ease-in-out;
+  font-family: var(--font-family-system, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif);
+}
+
+.category-tab:hover {
+  color: #495057;
+  background-color: #e9ecef;
+}
+
+.category-tab.active {
+  color: #0D6EFD;
+  border-bottom-color: #0D6EFD;
+  background-color: white;
+}
+
+.content-area {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+.function-list {
+  width: 40%;
+  border-right: 1px solid #dee2e6;
+  overflow-y: auto;
+  background-color: #f8f9fa;
+}
+
+.function-item {
+  padding: 12px 16px;
+  border-bottom: 1px solid #dee2e6;
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out;
+}
+
+.function-item:hover {
+  background-color: #e9ecef;
+}
+
+.function-item.selected {
+  background-color: #0D6EFD;
+  color: white;
+}
+
+.function-name {
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 4px;
+  font-family: var(--font-family-system, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif);
+}
+
+.function-syntax {
+  font-family: var(--font-family-mono, "SF Mono", "Cascadia Code", "Roboto Mono", "Liberation Mono", Menlo, Monaco, Consolas, monospace);
+  font-size: 0.875rem;
+  color: black;
+}
+
+.function-item.selected .function-syntax {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.function-details {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.function-details h4 {
+  margin: 0 0 16px 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #495057;
+  font-family: var(--font-family-system, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif);
+}
+
+.function-details p {
+  margin: 0 0 12px 0;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.4;
+  font-family: var(--font-family-system, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif);
+}
+
+.function-details p strong {
+  font-size: 0.875rem;
+  color: black;
+}
+
+.function-details button {
+  margin-top: 16px;
+  padding: 8px 16px;
+  background-color: #0D6EFD;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background-color 0.15s ease-in-out;
+  font-family: var(--font-family-system, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif);
+}
+
+.function-details button:hover {
+  background-color: #0B5ED7;
+}

@@ -1,0 +1,74 @@
+<div class="expression-editor-container">
+  <lib-expression-header 
+    [editorConfig]="editorConfig">
+  </lib-expression-header>
+
+  <div class="editor-section">
+    <lib-division-toggle 
+      [editorConfig]="editorConfig"
+      (configChange)="onConfigChange($event)">
+    </lib-division-toggle>
+
+    <lib-expression-textarea
+      [disabled]="disabled"
+      [editorConfig]="editorConfig"
+      [currentValidation]="currentValidation"
+      [(ngModel)]="value"
+      (valueChange)="onValueChange($event)"
+      (blur)="onTextareaBlur()">
+    </lib-expression-textarea>
+    
+    <lib-expression-controls
+      [disabled]="disabled"
+      [showCustomFunctionBuilder]="showCustomFunctionBuilder"
+      [hasVariables]="variables.length > 0"
+      (toggleEditor)="onToggleEditor()"
+      (clearExpression)="onClearExpression()"
+      (openFunctionsMenu)="onOpenFunctionsMenu()"
+      (openSymbolPicker)="onOpenSymbolPicker()"
+      (openCustomFunctionBuilder)="onOpenCustomFunctionBuilder()"
+      (closeCustomFunctionBuilder)="onCloseCustomFunctionBuilder()"
+      (customFunctionCreated)="onCustomFunctionCreated($event)"
+      (openVariableManager)="onOpenVariableManager()">
+    </lib-expression-controls>
+  </div>
+
+  <lib-expression-info
+    [value]="value"
+    [typeResult]="typeResult"
+    [currentValidation]="currentValidation">
+  </lib-expression-info>
+
+  <lib-functions-menu
+    [showFunctionsMenu]="showFunctionsMenu"
+    [functionCategories]="functionCategories"
+    [selectedFunctionCategory]="selectedFunctionCategory"
+    [selectedFunction]="selectedFunction"
+    (closeFunctionsMenu)="onCloseFunctionsMenu()"
+    (functionCategorySelected)="onFunctionCategorySelected($event)"
+    (functionSelected)="onFunctionSelected($event)"
+    (functionInserted)="onFunctionInserted($event)">
+  </lib-functions-menu>
+
+  <lib-symbol-picker
+    [showSymbolPicker]="showSymbolPicker"
+    [symbolCategories]="symbolCategories"
+    [selectedSymbolCategory]="selectedSymbolCategory"
+    [selectedSymbol]="selectedSymbol"
+    (closeSymbolPicker)="onCloseSymbolPicker()"
+    (symbolCategorySelected)="onSymbolCategorySelected($event)"
+    (symbolSelected)="onSymbolSelected($event)"
+    (symbolInserted)="onSymbolInserted($event)">
+  </lib-symbol-picker>
+
+  <lib-variable-manager
+    [showVariableManager]="showVariableManager"
+    [variables]="variables"
+    [allowVariableCreation]="enhancedConfig?.allowVariableCreation !== false"
+    (closeVariableManager)="onCloseVariableManager()"
+    (variableSelected)="onVariableSelected($event)"
+    (variableInserted)="onVariableInserted($event)"
+    (variableCreated)="onVariableCreated($event)"
+    (variableDeleted)="onVariableDeleted($event)">
+  </lib-variable-manager>
+</div>

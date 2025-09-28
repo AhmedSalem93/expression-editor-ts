@@ -1,9 +1,255 @@
 <div class="app-container">
-  
-  <main class="main-content">
-    <lib-expression-editor
-      [(ngModel)]="expressionValue"
-      [config]="editorConfig">
-    </lib-expression-editor>
-  </main>
+  <!-- Header -->
+  <div class="app-header">
+    <h1>Enhanced Expression Editor Test Suite</h1>
+    <p>Comprehensive testing for expressions, variables, and type-aware validation</p>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- General Context Section -->
+    <div class="test-section general-section">
+      <div class="section-header">
+        <h2>⚙️ General Context with Variables & Lambda Functions</h2>
+        <p>Flexible expression editor supporting lambda functions, variables, and all expression types</p>
+      </div>
+      
+      <div class="editor-container">
+        <lib-expression-editor
+          [(ngModel)]="generalExpression"
+          [editorConfig]="generalConfig"
+          (validationChange)="onGeneralValidationChange($event)"
+        ></lib-expression-editor>
+      </div>
+
+      <div class="examples-section">
+        <h4>Click to try examples:</h4>
+        
+        <!-- Lambda Function Examples -->
+        <div class="example-category">
+          <h5>🔸 Lambda Functions</h5>
+          <div class="examples-grid">
+            <button class="example-btn lambda-btn" (click)="selectGeneralExample('(x, y) => x + y')">
+              (x, y) => x + y
+            </button>
+            <button class="example-btn lambda-btn" (click)="selectGeneralExample('(price, quantity) => price * quantity')">
+              (price, quantity) => price * quantity
+            </button>
+            <button class="example-btn lambda-btn" (click)="selectGeneralExample('x => x * x')">
+              x => x * x
+            </button>
+            <button class="example-btn lambda-btn" (click)="selectGeneralExample('(a, b) => Math.max(a, b)')">
+              (a, b) => Math.max(a, b)
+            </button>
+          </div>
+        </div>
+
+        <!-- Boolean Examples -->
+        <div class="example-category">
+          <h5>🔸 Boolean Expressions</h5>
+          <div class="examples-grid">
+            <button class="example-btn boolean-btn" (click)="selectGeneralExample('temperature > 25')">
+              temperature > 25
+            </button>
+            <button class="example-btn boolean-btn" (click)="selectGeneralExample('status == &quot;active&quot;')">
+              status == "active"
+            </button>
+            <button class="example-btn boolean-btn" (click)="selectGeneralExample('isEnabled && hasPermission')">
+              isEnabled && hasPermission
+            </button>
+          </div>
+        </div>
+
+        <!-- Assignment Examples -->
+        <div class="example-category">
+          <h5>🔸 Assignment Expressions</h5>
+          <div class="examples-grid">
+            <button class="example-btn connector-btn" (click)="selectGeneralExample('output.value = input.data')">
+              output.value = input.data
+            </button>
+            <button class="example-btn connector-btn" (click)="selectGeneralExample('result = transform(source)')">
+              result = transform(source)
+            </button>
+            <button class="example-btn connector-btn" (click)="selectGeneralExample('target.name = source.title')">
+              target.name = source.title
+            </button>
+          </div>
+        </div>
+
+        <!-- Arithmetic Examples -->
+        <div class="example-category">
+          <h5>🔸 Arithmetic Expressions</h5>
+          <div class="examples-grid">
+            <button class="example-btn arithmetic-btn" (click)="selectGeneralExample('price * quantity')">
+              price * quantity
+            </button>
+            <button class="example-btn arithmetic-btn" (click)="selectGeneralExample('(a + b) / 2')">
+              (a + b) / 2
+            </button>
+            <button class="example-btn arithmetic-btn" (click)="selectGeneralExample('Math.sqrt(x * x + y * y)')">
+              Math.sqrt(x * x + y * y)
+            </button>
+          </div>
+        </div>
+
+        <!-- Variable Usage Examples -->
+        <div class="example-category">
+          <h5>🔸 Variable Usage</h5>
+          <div class="examples-grid">
+            <button class="example-btn variable-btn" (click)="selectGeneralExample('price * quantity + tax')">
+              price * quantity + tax
+            </button>
+            <button class="example-btn variable-btn" (click)="selectGeneralExample('temperature > 25 ? &quot;hot&quot; : &quot;cold&quot;')">
+              temperature > 25 ? "hot" : "cold"
+            </button>
+            <button class="example-btn variable-btn" (click)="selectGeneralExample('Math.round(price * quantity * 1.2)')">
+              Math.round(price * quantity * 1.2)
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Boolean Context Section -->
+    <div class="test-section boolean-section">
+      <div class="section-header">
+        <h2>🔵 Boolean Context</h2>
+      </div>
+      
+      <div class="editor-container">
+        <lib-expression-editor
+          [(ngModel)]="booleanExpression"
+          [editorConfig]="booleanConfig"
+          (validationChange)="onBooleanValidationChange($event)"
+        ></lib-expression-editor>
+      </div>
+    
+
+      <div class="examples-section">
+        <h4>Click to try examples:</h4>
+        <div class="examples-grid">
+          <button 
+            *ngFor="let example of booleanExamples" 
+            class="example-btn boolean-btn"
+            (click)="selectBooleanExample(example)"
+          >
+            {{ example }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Assignment Context Section -->
+    <div class="test-section connector-section">
+      <div class="section-header">
+        <h2>📋 Assignment Context</h2>
+      </div>
+      
+      <div class="editor-container">
+        <lib-expression-editor
+          [(ngModel)]="assignmentExpression"
+          [editorConfig]="assignmentConfig"
+          (validationChange)="onAssignmentValidationChange($event)"
+        ></lib-expression-editor>
+      </div>
+
+      <div class="examples-section">
+        <h4>Click to try examples:</h4>
+        <div class="examples-grid">
+          <button 
+            *ngFor="let example of assignmentExamples" 
+            class="example-btn connector-btn"
+            (click)="selectAssignmentExample(example)"
+          >
+            {{ example }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Limited Connector Context Section -->
+    <div class="test-section limited-connector-section">
+      <div class="section-header">
+        <h2>🟠 Limited Connector Context</h2>
+      </div>
+      
+      <div class="editor-container">
+        <lib-expression-editor
+          [(ngModel)]="limitedConnectorExpression"
+          [editorConfig]="limitedConnectorConfig"
+          (validationChange)="onLimitedConnectorValidationChange($event)"
+          (configChange)="onLimitedConnectorConfigChange($event)"
+        ></lib-expression-editor>
+      </div>
+
+      <div class="examples-section">
+        <h4>Click to try examples:</h4>
+        <div class="examples-grid">
+          <button 
+            *ngFor="let example of limitedConnectorExamples" 
+            class="example-btn limited-connector-btn"
+            (click)="selectLimitedConnectorExample(example)"
+          >
+            {{ example }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Arithmetic Context Section -->
+    <div class="test-section arithmetic-section">
+      <div class="section-header">
+        <h2>🔢 Arithmetic Context</h2>
+      </div>
+      
+      <div class="editor-container">
+        <lib-expression-editor
+          [(ngModel)]="arithmeticExpression"
+          [editorConfig]="arithmeticConfig"
+          (validationChange)="onArithmeticValidationChange($event)"
+        ></lib-expression-editor>
+      </div>
+
+      <div class="examples-section">
+        <h4>Click to try examples:</h4>
+        <div class="examples-grid">
+          <button 
+            *ngFor="let example of arithmeticExamples" 
+            class="example-btn arithmetic-btn"
+            (click)="selectArithmeticExample(example)"
+          >
+            {{ example }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Instructions Section -->
+    <div class="instructions-section">
+      <h3>🚀 How to Test Expressions</h3>
+      <div class="instructions-grid">
+        <div class="instruction-card">
+          <h4>📝 Expression Testing Steps</h4>
+          <ul>
+            <li>Use the <strong>General Expression</strong> section at the top</li>
+            <li>Click <strong>"🧮 Variables"</strong> to browse available variables</li>
+            <li>Click <strong>"⚙️ Create Function"</strong> to build custom functions</li>
+            <li>Try examples like <code>(x, y) => x + y</code></li>
+            <li>Use variables: <code>price * quantity</code></li>
+            <li>Combine both: <code>(p, q) => p * q</code> then use <code>price, quantity</code></li>
+          </ul>
+        </div>
+        <div class="instruction-card">
+          <h4>✅ Expression Features</h4>
+          <ul>
+            <li><strong>Variable Manager:</strong> Browse, insert, create, and delete variables</li>
+            <li><strong>Function Builder:</strong> Visual function creation with validation</li>
+            <li><strong>Syntax Validation:</strong> Real-time expression checking</li>
+            <li><strong>Type Inference:</strong> Automatic type detection</li>
+            <li><strong>Examples:</strong> Pre-built expressions to test</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

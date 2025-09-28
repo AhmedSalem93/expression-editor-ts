@@ -1,10 +1,49 @@
 /* You can add global styles to this file, and also import other style files */
 
+/* Global font families */
+:root {
+  --font-family-system: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --font-family-mono: "SF Mono", "Cascadia Code", "Roboto Mono", "Liberation Mono", Menlo, Monaco, Consolas, monospace;
+}
+
 /* Minimal Material UI styles - only what's needed */
 html, body { 
   height: 100%; 
   margin: 0; 
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+  font-family: var(--font-family-system);
+}
+
+/* Typography scale */
+h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  font-family: var(--font-family-system);
+}
+
+h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  font-family: var(--font-family-system);
+}
+
+body, p, div, span {
+  font-size: 1rem;
+  font-weight: 400;
+  font-family: var(--font-family-system);
+}
+
+/* Labels and small text */
+.label, .small-text, label, small {
+  font-size: 0.875rem;
+  color: black;
+  font-family: var(--font-family-system);
+}
+
+/* Textarea and code input */
+textarea, .code-input, .monospace {
+  font-size: 1rem;
+  font-weight: 400;
+  font-family: var(--font-family-mono);
 }
 
 /* App container styles */

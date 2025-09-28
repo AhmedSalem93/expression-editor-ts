@@ -1,0 +1,19 @@
+<div *ngIf="isLimitedConnectorContext()" class="division-toggle-section">
+  <div class="toggle-container">
+    <label class="toggle-label">
+      <input 
+        type="checkbox" 
+        [checked]="editorConfig?.allowDivision === true"
+        (change)="toggleDivision()"
+        class="toggle-checkbox">
+      <span class="toggle-text">Allow Division (/) Operation</span>
+    </label>
+    <div class="toggle-status" [class.enabled]="editorConfig?.allowDivision === true" [class.disabled]="editorConfig?.allowDivision !== true">
+      {{ (editorConfig?.allowDivision === true) ? 'Division Enabled' : 'Division Disabled' }}
+    </div>
+  </div>
+  <div class="allowed-operations">
+    <strong>Allowed operations:</strong> 
+    <span class="operations">+ - * {{ (editorConfig?.allowDivision === true) ? '/' : '' }}</span>
+  </div>
+</div>
