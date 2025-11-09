@@ -5,7 +5,7 @@ import {
   ExpressionEditorConfig, 
   TypeValidationResult, 
   ExpressionEditorConfigEnhanced
-} from '../interfaces/shared.interfaces';
+} from '../../interfaces/shared.interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -13,25 +13,32 @@ import {
 export class ValidationService {
 
   validateExpressionType(expression: string, returnType: DataType, config: ExpressionEditorConfig | ExpressionEditorConfigEnhanced): TypeValidationResult {
+    let result: TypeValidationResult;
+    
     switch (config.contextType) {
       case ContextType.BOOLEAN:
-        return this.validateBooleanContext(expression, returnType, config);
+        result = this.validateBooleanContext(expression, returnType, config);
+        break;
       case ContextType.ASSIGNMENT:
-        return this.validateAssignmentContext(expression, returnType, config);
+        result = this.validateAssignmentContext(expression, returnType, config);
+        break;
       case ContextType.ARITHMETIC:
-        return this.validateArithmeticContext(expression, returnType, config);
+        result = this.validateArithmeticContext(expression, returnType, config);
+        break;
       case ContextType.LIMITED_CONNECTOR:
-        return this.validateLimitedConnectorContext(expression, returnType, config);
+        result = this.validateLimitedConnectorContext(expression, returnType, config);
+        break;
       case ContextType.GENERAL:
-        return {
+        result = {
           isValid: true,
           message: 'Expression is valid',
           expectedType: config.expectedResultType,
           actualType: returnType,
           contextType: config.contextType
         };
+        break;
       default:
-        return {
+        result = {
           isValid: true,
           message: 'Expression is valid',
           expectedType: config.expectedResultType,
@@ -39,6 +46,12 @@ export class ValidationService {
           contextType: config.contextType
         };
     }
+    
+    // Log validation result to console
+    console.log(`%c${result.isValid ? '✓' : '✗'} Validation: ${result.message}`, 
+      `color: ${result.isValid ? '#4ade80' : '#f87171'}; font-weight: bold;`);
+    
+    return result;
   }
 
   private validateBooleanContext(expression: string, returnType: DataType, config: ExpressionEditorConfig | ExpressionEditorConfigEnhanced): TypeValidationResult {
@@ -147,7 +160,6 @@ export class ValidationService {
       return false;
     }
     
-    // Remove numbers, parentheses, spaces, field names, and commas
     const operators = expression.replace(/[\d\w\s().,]/g, '');
     
     if (config.allowDivision === false) {
@@ -160,7 +172,7 @@ export class ValidationService {
   }
 
   private isLambdaFunction(expression: string): boolean {
-    // Detect lambda function patterns like (x, y) => x + y or x => x * 2
+    // Detect lambda function patterns 
     return /^\s*(\([^)]*\)|\w+)\s*=>\s*.+/.test(expression.trim());
   }
 }

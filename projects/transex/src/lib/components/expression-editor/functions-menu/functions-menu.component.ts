@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FunctionCategory, FunctionItem } from '../../../interfaces/shared.interfaces';
-import { ExtensionManagerService } from '../../../services/extension-manager.service';
+import { ExtensionManagerService } from '../../../services/extension-manager/extension-manager.service';
 
 @Component({
   selector: 'lib-functions-menu',

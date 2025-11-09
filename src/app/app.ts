@@ -1,21 +1,24 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+
 import { ExpressionEditorComponent } from '../../projects/transex/src/lib/components/expression-editor/expression-editor.component';
-import { ExpressionEvaluatorService } from '../../projects/transex/src/lib/services/expression-evaluator.service';
+import { ExpressionEvaluatorService } from 'transex';
 import { 
   ExpressionEditorConfig, 
   ExpressionEditorConfigEnhanced,
   TypeValidationResult, 
   Variable, 
   DataType, 
-  ContextType 
+  ContextType,
+  FieldMappingData  
 } from '../../projects/transex/src/lib/interfaces/shared.interfaces';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, FormsModule, ExpressionEditorComponent],
+  imports: [CommonModule, FormsModule, HttpClientModule, ExpressionEditorComponent],
   templateUrl: './app.html',
   styleUrls: ['./app.css']
 })
@@ -27,12 +30,16 @@ export class AppComponent {
   limitedConnectorExpression = ''; 
   generalExpression = '';
 
-  // Expression configurations for each context
-  booleanConfig: ExpressionEditorConfig;
-  assignmentConfig: ExpressionEditorConfig; 
-  arithmeticConfig: ExpressionEditorConfig;
-  limitedConnectorConfig: ExpressionEditorConfig;
-  generalConfig: ExpressionEditorConfigEnhanced;
+  currentExpression = '';
+  binaryTreeForBackend: any = null;
+  expression = ''; // Add this line for simple mode demo
+
+ // Expression configurations for each context
+ booleanConfig: ExpressionEditorConfigEnhanced;
+ assignmentConfig: ExpressionEditorConfigEnhanced; 
+ arithmeticConfig: ExpressionEditorConfigEnhanced;
+ limitedConnectorConfig: ExpressionEditorConfigEnhanced;
+ generalConfig: ExpressionEditorConfigEnhanced;
 
   // Validation results for each context
   booleanValidation: TypeValidationResult | null = null;
@@ -158,25 +165,60 @@ export class AppComponent {
     }
   ];
 
-  constructor(private evaluatorService: ExpressionEvaluatorService) {
+  constructor(
+    private evaluatorService: ExpressionEvaluatorService,
+    private http: HttpClient  // Add this line
+  ) {
     // Add test variables to the service for proper management
     // This ensures variables are consistently managed across all contexts
     this.testVariables.forEach(variable => {
       this.evaluatorService.addVariable(variable);
     });
 
-    // Initialize Expression configurations - variables managed by service
+        // Initialize Expression configurations - variables managed by service
     this.booleanConfig = {
-      ...this.evaluatorService.getBooleanConfig()
+      ...this.evaluatorService.getBooleanConfig(),
+      variableMappings: [
+        {
+          frontendName: 'input.status',
+          backendName: 'output.isActive'
+        }
+      ]
     };
+    
     this.assignmentConfig = {
-      ...this.evaluatorService.getAssignmentConfig()
+      ...this.evaluatorService.getAssignmentConfig(),
+      variableMappings: [
+        {
+          frontendName: 'input.data',
+          backendName: 'output.value'
+        }
+      ]
     };
+    
     this.arithmeticConfig = {
-      ...this.evaluatorService.getArithmeticConfig()
+      ...this.evaluatorService.getArithmeticConfig(),
+      variableMappings: [
+        {
+          frontendName: 'input.price',
+          backendName: 'output.total'
+        }
+      ]
     };
+    
     this.limitedConnectorConfig = {
-      ...this.evaluatorService.getLimitedConnectorConfig()
+      ...this.evaluatorService.getLimitedConnectorConfig(false),
+      allowDivision: false,
+      title: 'Limited Connector with Field Mapping',
+      description: 'Test field mapping: input.field[0] → output.status',
+      placeholder: 'Try: (5+5)*5',
+      examples: ['(5+5)*5', 'price * quantity', '10 + 20 * 3'],
+      variableMappings: [
+        {
+          frontendName: 'input.field[0]',
+          backendName: 'output.status'
+        }
+      ]
     };
 
     // Initialize General configuration with enhanced features
@@ -188,7 +230,13 @@ export class AppComponent {
       title: 'General Expression Editor with Variables',
       description: 'Create expressions and lambda functions using variables. Supports syntax like (x, y) => x + y',
       placeholder: 'Enter expression or lambda function (e.g., (x, y) => x + y) or use variables like price * quantity',
-      examples: this.generalExamples
+      examples: this.generalExamples,
+      variableMappings: [
+        {
+          frontendName: 'input.value',
+          backendName: 'output.result'
+        }
+      ]
     };
     // Trigger recompilation and ensure the file is properly saved
   }
@@ -245,5 +293,59 @@ export class AppComponent {
 
   selectGeneralExample(example: string) {
     this.generalExpression = example;
+  }
+  // This method receives the binary tree
+  // onBinaryTreeChange(binaryTree: any) {
+  //   if (binaryTree && binaryTree.success) {
+  //     this.binaryTreeForBackend = binaryTree;
+      
+  //     // Log to console to see the binary tree
+  //     //console.log('✅ Binary Tree Generated:', binaryTree);
+  //     console.log('📄 JSON for Backend:', binaryTree.json);
+  //     //console.log('🌳 Tree Structure:', binaryTree.tree);
+      
+  //     // Uncomment when you have a backend endpoint ready
+  //     // this.sendToBackend(binaryTree);
+  //   }
+  // }
+  // This method receives the field mapping data
+onFieldMappingChange(fieldMapping: FieldMappingData | null) {
+  if (fieldMapping) {
+    // Simulate sending to backend
+    this.sendFieldMappingToBackend(fieldMapping);
+  }
+}
+
+sendFieldMappingToBackend(fieldMapping: FieldMappingData) {
+  const backendPayload = {
+    fieldName: fieldMapping.backendField,  // "output.status"
+    expression: fieldMapping.expression,
+    tree: JSON.parse(fieldMapping.tree.json),
+    timestamp: fieldMapping.timestamp
+  };
+  
+  console.log('📤 Sending to Backend:', backendPayload);
+  
+  // Uncomment when you have a backend endpoint
+  // this.http.post('/api/fields/save', backendPayload).subscribe(response => {
+  //   console.log('✅ Saved to backend:', response);
+  // });
+}
+
+  sendToBackend(binaryTree: any) {
+    // Option 1: Send the JSON string
+    const jsonPayload = binaryTree.json;
+    
+    // Option 2: Send the tree object
+    const treePayload = binaryTree.tree;
+    
+    // Example HTTP request
+    this.http.post('/api/expressions/parse', {
+      expression: binaryTree.expression,
+      binaryTree: JSON.parse(binaryTree.json),
+      timestamp: binaryTree.timestamp
+    }).subscribe((response: any) => {  // Add type annotation
+      console.log('Backend processed:', response);
+    });
   }
 }

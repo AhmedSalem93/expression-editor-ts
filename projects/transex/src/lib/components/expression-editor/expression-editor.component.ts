@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, forwardRef, ViewChild } from '@angular/core';
+import { Component, Input, Output, EventEmitter, forwardRef, ViewChild, OnDestroy } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -12,9 +12,9 @@ import { FunctionsMenuComponent } from './functions-menu/functions-menu.componen
 import { SymbolPickerComponent } from './symbol-picker/symbol-picker.component';
 import { VariableManagerComponent } from './variable-manager/variable-manager.component';
 
-import { ExpressionEvaluatorService } from '../../services/expression-evaluator.service';
-import { ExtensionManagerService } from '../../services/extension-manager.service';
-import { CustomFunction } from '../../interfaces/extensibility.interfaces';
+import { ExpressionEvaluatorService } from '../../services/expression-evaluator/expression-evaluator.service';
+import { ExtensionManagerService } from '../../services/extension-manager/extension-manager.service';
+import { CustomFunction } from '../../interfaces/core/extensibility.interfaces';
 import { 
   FunctionCategory, 
   FunctionItem, 
@@ -23,11 +23,15 @@ import {
   ExpressionEditorConfig,
   TypeValidationResult,
   Variable,
-  ExpressionTypeResult,
+  ExpressionResult,
   ExpressionEditorConfigEnhanced,
-  DataType
+  DataType,
+  BinaryTreeResult,
+  TextareaStyleConfig,
+  FieldMappingData
 } from '../../interfaces/shared.interfaces';
 import { FUNCTION_CATEGORIES, SYMBOL_CATEGORIES } from '../../data/function-categories.data';
+
 
 @Component({
   selector: 'lib-expression-editor',
@@ -41,8 +45,8 @@ import { FUNCTION_CATEGORIES, SYMBOL_CATEGORIES } from '../../data/function-cate
     ExpressionControlsComponent,
     ExpressionInfoComponent,
     FunctionsMenuComponent,
-    SymbolPickerComponent,
-    VariableManagerComponent
+    VariableManagerComponent,
+    SymbolPickerComponent
   ],
   templateUrl: './expression-editor.component.html',
   styleUrls: ['./expression-editor.component.css'],
@@ -54,17 +58,22 @@ import { FUNCTION_CATEGORIES, SYMBOL_CATEGORIES } from '../../data/function-cate
     }
   ]
 })
-export class ExpressionEditorComponent implements ControlValueAccessor {
+export class ExpressionEditorComponent implements ControlValueAccessor, OnDestroy {
   @Input() disabled = false;
   @Input() editorConfig?: ExpressionEditorConfig | ExpressionEditorConfigEnhanced;
+  @Input() simpleMode = false;
+  @Input() textareaStyle?: TextareaStyleConfig;
+  @Input() placeholder?: string;
   @Output() expressionChange = new EventEmitter<string>();
   @Output() validationChange = new EventEmitter<TypeValidationResult | null>();
   @Output() configChange = new EventEmitter<ExpressionEditorConfig | ExpressionEditorConfigEnhanced>();
-  
+  @Output() binaryTreeChange = new EventEmitter<BinaryTreeResult | null>();
+  @Output() fieldMappingChange = new EventEmitter<FieldMappingData | null>();
+
   @ViewChild(ExpressionTextareaComponent) expressionTextarea!: ExpressionTextareaComponent;
 
   value = '';
-  typeResult: ExpressionTypeResult | null = null;
+  typeResult: ExpressionResult | null = null;
   currentValidation: TypeValidationResult | null = null;
   
   showFunctionsMenu = false;
@@ -79,8 +88,9 @@ export class ExpressionEditorComponent implements ControlValueAccessor {
   
   private onChange = (value: string) => {};
   private onTouched = () => {};
+  private debounceTimer: any = null;
+  private debounceDelay = 1000;
 
-  // Data
   functionCategories: FunctionCategory[] = [];
   symbolCategories: SymbolCategory[] = SYMBOL_CATEGORIES;
 
@@ -126,12 +136,18 @@ export class ExpressionEditorComponent implements ControlValueAccessor {
     this.value = value;
     this.onChange(this.value);
     this.expressionChange.emit(this.value);
-    this.analyzeExpression();
+    
+    if (this.debounceTimer) {
+      clearTimeout(this.debounceTimer);
+    }
+    
+    this.debounceTimer = setTimeout(() => {
+      this.analyzeExpression();
+    }, this.debounceDelay);
   }
 
   onTextareaBlur() {
     this.onTouched();
-    this.analyzeExpression();
   }
 
   onToggleEditor() {
@@ -144,6 +160,7 @@ export class ExpressionEditorComponent implements ControlValueAccessor {
     this.expressionChange.emit(this.value);
     this.typeResult = null;
     this.validationChange.emit(null);
+    this.binaryTreeChange.emit(null);
   }
 
   onConfigChange(newConfig: ExpressionEditorConfig | ExpressionEditorConfigEnhanced) {
@@ -203,7 +220,7 @@ export class ExpressionEditorComponent implements ControlValueAccessor {
       : variable.name;
     
     this.insertTextAtCursor(textToInsert);
-    this.onCloseVariableManager();
+    this.onCloseVariableManager(); // Add missing modal close call
   }
   onVariableCreated(variable: Variable) {
     this.evaluatorService.addVariable(variable);
@@ -223,9 +240,11 @@ export class ExpressionEditorComponent implements ControlValueAccessor {
       this.typeResult = null;
       this.currentValidation = null;
       this.validationChange.emit(null);
+      this.binaryTreeChange.emit(null);
+      this.fieldMappingChange.emit(null);
       return;
     }
-
+  
     this.typeResult = this.evaluatorService.identifyExpressionType(this.value, this.editorConfig);
     
     if (this.typeResult?.typeValidation) {
@@ -235,8 +254,40 @@ export class ExpressionEditorComponent implements ControlValueAccessor {
       this.currentValidation = null;
       this.validationChange.emit(null);
     }
+  
+    if (this.typeResult?.binaryTree) {
+      const isValid = this.typeResult?.typeValidation?.isValid !== false;
+      
+      if (isValid && this.typeResult.binaryTree.success) {
+        this.binaryTreeChange.emit(this.typeResult.binaryTree);
+        
+        // ✅ Emit field mapping data
+        const enhancedConfig = this.editorConfig as ExpressionEditorConfigEnhanced;
+        if (enhancedConfig?.variableMappings && enhancedConfig.variableMappings.length > 0) {
+          const mapping = enhancedConfig.variableMappings[0];
+          
+          const fieldMappingData: FieldMappingData = {
+            frontendField: mapping.frontendName,
+            backendField: mapping.backendName,
+            expression: this.value,
+            tree: this.typeResult.binaryTree,
+            timestamp: new Date().toISOString()
+          };
+          
+          this.fieldMappingChange.emit(fieldMappingData);
+          
+          console.log('💾 Field Mapping Data:');
+          console.log('  Frontend Field:', fieldMappingData.frontendField);
+          console.log('  Backend Field:', fieldMappingData.backendField);
+          console.log('  Expression:', fieldMappingData.expression);
+          console.log('  Tree:', fieldMappingData.tree.json);
+        }
+      } else {
+        this.binaryTreeChange.emit(null);
+        this.fieldMappingChange.emit(null);
+      }
+    }  
   }
-
   writeValue(value: string | null): void {
     this.value = value || '';
     if (this.value) {
@@ -251,8 +302,36 @@ export class ExpressionEditorComponent implements ControlValueAccessor {
   registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
   }
-
+  
   setDisabledState(isDisabled: boolean): void {
     this.disabled = isDisabled;
+  }
+
+
+  getTextareaStyles(): any {
+    if (!this.textareaStyle) return {};
+    
+    return {
+      '--border-color': this.textareaStyle.borderColor || '#000000',
+      '--focus-border-color': this.textareaStyle.focusBorderColor || '#007bff',
+      '--valid-border-color': this.textareaStyle.validBorderColor || '#28a745',
+      '--error-border-color': this.textareaStyle.errorBorderColor || '#dc3545',
+      'border-width': this.textareaStyle.borderWidth || '2px',
+      'border-style': this.textareaStyle.borderStyle || 'solid',
+      'border-radius': this.textareaStyle.borderRadius || '4px',
+      'background-color': this.textareaStyle.backgroundColor || '#ffffff',
+      'color': this.textareaStyle.textColor || '#000000',
+      'font-size': this.textareaStyle.fontSize || '14px',
+      'font-family': this.textareaStyle.fontFamily || 'monospace',
+      'padding': this.textareaStyle.padding || '8px',
+      'height': this.textareaStyle.height || 'auto',
+      'width': this.textareaStyle.width || '100%'
+    };
+  }
+  
+  ngOnDestroy() {
+    if (this.debounceTimer) {
+      clearTimeout(this.debounceTimer);
+    }
   }
 }

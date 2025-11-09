@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { ValidationService } from './validation.service';
-import { DataType, ContextType, ExpressionEditorConfig } from '../interfaces/shared.interfaces';
+import { DataType, ContextType, ExpressionEditorConfig } from '../../interfaces/shared.interfaces';
 
 describe('ValidationService', () => {
   let service: ValidationService;

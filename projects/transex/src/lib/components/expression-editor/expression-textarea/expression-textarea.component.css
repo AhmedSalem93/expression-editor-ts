@@ -1,11 +1,10 @@
 .textarea-container {
   margin-bottom: 16px;
 }
-
 .expression-textarea {
   width: 98%;
   padding: 16px;
-  border: 2px solid #ced4da;
+  border: 2px solid var(--border-color, #ced4da);
   border-radius: 8px;
   font-family: var(--font-family-mono, "SF Mono", "Cascadia Code", "Roboto Mono", "Liberation Mono", Menlo, Monaco, Consolas, monospace);
   font-size: 1rem;
@@ -19,7 +18,7 @@
 
 .expression-textarea:focus {
   outline: none;
-  border-color: #007bff;
+  border-color: var(--focus-border-color, #007bff) !important;
   box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
@@ -29,13 +28,12 @@
 }
 
 .expression-textarea.valid {
-  border-color: #28a745;
+  border-color: var(--valid-border-color, #28a745) !important;
 }
 
 .expression-textarea.invalid {
-  border-color: #dc3545;
+  border-color: var(--error-border-color, #dc3545) !important;
 }
-
 .validation-display {
   display: flex;
   align-items: center;

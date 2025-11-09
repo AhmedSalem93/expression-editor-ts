@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { CustomFunction } from '../../../interfaces/extensibility.interfaces';
+import { CustomFunction } from '../../../interfaces/core/extensibility.interfaces';
 
 @Component({
   selector: 'lib-custom-function-builder',

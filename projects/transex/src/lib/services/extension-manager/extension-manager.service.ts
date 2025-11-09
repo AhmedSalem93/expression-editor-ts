@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CustomFunction } from '../interfaces/extensibility.interfaces';
+import { CustomFunction } from '../../interfaces/core/extensibility.interfaces';
 
 @Injectable({
   providedIn: 'root'

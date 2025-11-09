@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FunctionsMenuComponent } from './functions-menu.component';
-import { ExtensionManagerService } from '../../../services/extension-manager.service';
+import { ExtensionManagerService } from '../../../services/extension-manager/extension-manager.service';
 import { FunctionCategory, FunctionItem } from '../../../interfaces/shared.interfaces';
 
 describe('FunctionsMenuComponent', () => {

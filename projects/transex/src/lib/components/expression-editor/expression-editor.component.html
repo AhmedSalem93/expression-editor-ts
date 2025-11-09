@@ -1,4 +1,21 @@
-<div class="expression-editor-container">
+<!-- Simple Mode: Just Textarea -->
+<div *ngIf="simpleMode" class="simple-expression-editor">
+  <textarea
+    [(ngModel)]="value"
+    (input)="onValueChange(value)"
+    (blur)="onTextareaBlur()"
+    [disabled]="disabled"
+    [placeholder]="placeholder || 'Enter expression...'"
+    [ngStyle]="getTextareaStyles()"
+    [class.valid]="currentValidation && currentValidation.isValid"
+    [class.invalid]="currentValidation && !currentValidation.isValid"
+    class="simple-textarea"
+    rows="1">
+  </textarea>
+</div>
+
+<!-- Full Mode: Complete Expression Editor -->
+<div *ngIf="!simpleMode" class="expression-editor-container">
   <lib-expression-header 
     [editorConfig]="editorConfig">
   </lib-expression-header>
@@ -32,13 +49,14 @@
       (openVariableManager)="onOpenVariableManager()">
     </lib-expression-controls>
   </div>
-
+  
   <lib-expression-info
     [value]="value"
     [typeResult]="typeResult"
     [currentValidation]="currentValidation">
   </lib-expression-info>
 
+  <!-- Modals -->
   <lib-functions-menu
     [showFunctionsMenu]="showFunctionsMenu"
     [functionCategories]="functionCategories"
@@ -71,4 +89,5 @@
     (variableCreated)="onVariableCreated($event)"
     (variableDeleted)="onVariableDeleted($event)">
   </lib-variable-manager>
+  
 </div>

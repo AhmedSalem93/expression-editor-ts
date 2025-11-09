@@ -23,7 +23,6 @@ export class ExpressionTextareaComponent implements ControlValueAccessor {
   @Input() editorConfig?: ExpressionEditorConfig;
   @Input() currentValidation: TypeValidationResult | null = null;
   @Output() valueChange = new EventEmitter<string>();
-  @Output() blur = new EventEmitter<void>();
   
   @ViewChild('expressionTextarea') expressionTextarea!: ElementRef<HTMLTextAreaElement>;
 
@@ -38,10 +37,6 @@ export class ExpressionTextareaComponent implements ControlValueAccessor {
     this.valueChange.emit(this.value);
   }
 
-  onBlur() {
-    this.onTouched();
-    this.blur.emit();
-  }
 
   getPlaceholder(): string {
     return 'Enter your expression here...';

@@ -37,14 +37,6 @@ describe('ExpressionTextareaComponent', () => {
     expect(component.valueChange.emit).toHaveBeenCalledWith('test expression');
   });
 
-  it('should emit blur event on blur', () => {
-    spyOn(component.blur, 'emit');
-    
-    const textarea = fixture.nativeElement.querySelector('textarea') as HTMLTextAreaElement;
-    textarea.dispatchEvent(new Event('blur'));
-    
-    expect(component.blur.emit).toHaveBeenCalled();
-  });
 
   it('should show validation success message', () => {
     component.currentValidation = {
@@ -153,8 +145,7 @@ describe('ExpressionTextareaComponent', () => {
     const mockFn = jasmine.createSpy('onTouched');
     component.registerOnTouched(mockFn);
     
-    component.onBlur();
-    expect(mockFn).toHaveBeenCalled();
+    expect(component['onTouched']).toBe(mockFn);
   });
 
   it('should set disabled state', () => {

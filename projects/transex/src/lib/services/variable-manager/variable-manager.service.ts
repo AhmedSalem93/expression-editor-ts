@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Variable, DataType } from '../interfaces/shared.interfaces';
-import { DEFAULT_VARIABLES } from '../data/default-variables.data';
+import { Variable, DataType } from '../../interfaces/shared.interfaces';
+import { DEFAULT_VARIABLES } from '../../data/default-variables.data';
 
 @Injectable({
   providedIn: 'root'

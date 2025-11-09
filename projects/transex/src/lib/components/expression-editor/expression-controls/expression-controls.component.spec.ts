@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ExpressionControlsComponent } from './expression-controls.component';
-import { CustomFunction } from '../../../interfaces/extensibility.interfaces';
+import { CustomFunction } from '../../../interfaces/core/extensibility.interfaces';
 
 describe('ExpressionControlsComponent', () => {
   let component: ExpressionControlsComponent;

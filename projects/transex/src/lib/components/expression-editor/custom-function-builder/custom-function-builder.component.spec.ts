@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { CustomFunctionBuilderComponent } from './custom-function-builder.component';
-import { CustomFunction } from '../../../interfaces/extensibility.interfaces';
+import { CustomFunction } from '../../../interfaces/core/extensibility.interfaces';
 
 describe('CustomFunctionBuilderComponent', () => {
   let component: CustomFunctionBuilderComponent;

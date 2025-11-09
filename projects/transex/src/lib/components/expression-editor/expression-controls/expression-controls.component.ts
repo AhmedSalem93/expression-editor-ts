@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CustomFunctionBuilderComponent } from '../custom-function-builder/custom-function-builder.component';
-import { CustomFunction } from '../../../interfaces/extensibility.interfaces';
+import { CustomFunction } from '../../../interfaces/core/extensibility.interfaces';
 
 @Component({
   selector: 'lib-expression-controls',

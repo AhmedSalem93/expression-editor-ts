@@ -2,8 +2,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ExpressionEditorComponent } from './expression-editor.component';
-import { ExpressionEvaluatorService } from '../../services/expression-evaluator.service';
-import { ExtensionManagerService } from '../../services/extension-manager.service';
+import { ExpressionEvaluatorService } from '../../services/expression-evaluator/expression-evaluator.service';
+import { ExtensionManagerService } from '../../services/extension-manager/extension-manager.service';
 
 // Import all sub-components with correct paths
 import { ExpressionHeaderComponent } from './expression-header/expression-header.component';
@@ -17,8 +17,7 @@ import { CustomFunctionBuilderComponent } from './custom-function-builder/custom
 import { VariableManagerComponent } from './variable-manager/variable-manager.component';
 
 import { DataType, ContextType, TypeValidationResult, ExpressionTypeResult } from '../../interfaces/shared.interfaces';
-import { CustomFunction } from '../../interfaces/extensibility.interfaces';
-
+import { CustomFunction } from '../../interfaces/core/extensibility.interfaces';
 describe('ExpressionEditorComponent', () => {
   let component: ExpressionEditorComponent;
   let fixture: ComponentFixture<ExpressionEditorComponent>;
